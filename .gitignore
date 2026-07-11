@@ -5,6 +5,7 @@ jornal.sqlite3
 
 .env
 
+/media_local
 
 /config/__pycache__
 /apps/__pycache__

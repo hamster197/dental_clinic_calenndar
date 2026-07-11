@@ -32,7 +32,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         ordering = ['-id']
 
     def __str__(self):
-        return '%s %s %s' % (self.last_name, self.first_name, self.pacient_profile_user_id.date_birth)
+        date_birth = None
+        if hasattr(self, "pacient_profile_user_id"):
+            date_birth = self.pacient_profile_user_id.date_birth
+
+        return '%s %s %s' % (self.last_name, self.first_name, date_birth)
 
 
 class PacientProfile(models.Model):
