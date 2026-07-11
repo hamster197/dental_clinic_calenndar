@@ -1,0 +1,24 @@
+{% load static %}
+
+
+{% include '_breadcrumbs.html' %}
+
+{% if user.is_authenticated %}
+<p> {{ request.user.last_name }} {{ request.user.first_name|slice:"1" }}. {{ request.user.patronymic|slice:"1" }}. </p>
+<a href="{% url "accounts_urls:password_change" %}">change password </a></p>
+<a href="{% url "accounts_urls:main_url" %}">Календарь </a></p>
+<a href="{% url "patients_urls:patient_choise_url" %}">Прием пациента </a></p>
+
+<form method="post" action="{% url 'accounts_urls:logout_url' %}">
+    {% csrf_token %}
+    <button class="lr-button lr-button-primary lr-button-small lr-text-small" type="submit">Log out</button>
+</form>
+
+
+{% else %}
+<a href="{% url "accounts_urls:login_url"  %}" >Login </a>
+{%endif %}
+
+{% block content %}
+
+{% endblock %}

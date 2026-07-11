@@ -1,0 +1,73 @@
+{% extends '_main.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<form method="GET" action="">
+    <input type="date" name="search" value="{{ search_val }}" >
+
+    <button type="submit">Filter</button>
+    <a href="{% url 'accounts_urls:main_url' %}">Reset</a>
+</form>
+
+{% now "Y-m-d" as today_date %}
+
+<p>Понедельник {{ monday_date|date:"j F Y"  }} {% if monday_date|date:"Y-m-d" == today_date %} Если сегодня то выделить {% endif %}</p>
+{% if not monday_qst %} No data {% endif %}
+{% for service in monday_qst %}
+<li>{{ service.date_time }} {{ service.service_id }} {{ service.appointment_id.patient_id.last_name }} {{ service.appointment_id.patient_id.first_name }}
+    {% if service.status %} Услуга оказана {% endif %} /p>
+    {% comment %}{% if service.status %} если статус выполнено то можно выделить цветом {% endif %} {% endcomment %}
+</li>
+{% endfor %}
+<p>Вторник {{ tuesday_date|date:"j F Y"  }} {% if tuesday_date|date:"Y-m-d" == today_date %} Если сегодня то выделить {% endif %}</p>
+{% if not tuesday_qst %} No data {% endif %}
+{% for service in tuesday_qst %}
+<li>{{ service.date_time }} {{ service.service_id }} {{ service.appointment_id.patient_id.last_name }} {{ service.appointment_id.patient_id.first_name }}
+    {% if service.status %} Услуга оказана {% endif %}
+    {% comment %}{% if service.status %} если статус выполнено то можно выделить цветом {% endif %} {% endcomment %}
+</li>
+{% endfor %}
+<p>Среда {{ wednesday_date|date:"j F Y"  }} {% if wednesday_date|date:"Y-m-d" == today_date %} Если сегодня то выделить {% endif %}</p>
+{% if not wednesday_qst %} No data {% endif %}
+{% for service in wednesday_qst %}
+<li>{{ service.date_time }} {{ service.service_id }} {{ service.appointment_id.patient_id.last_name }} {{ service.appointment_id.patient_id.first_name }}
+    {% if service.status %} Услуга оказана {% endif %} <a href="{% url "patients_urls:appointment_service_detail_url" pk=service.pk %}">Подробнее </a><
+    {% comment %}{% if service.status %} если статус выполнено то можно выделить цветом {% endif %} {% endcomment %}
+</li>
+{% endfor %}
+<p>Четверг {{ thursday_date|date:"j F Y"  }} {% if thursday_date|date:"Y-m-d" == today_date %} Если сегодня то выделить {% endif %}</p>
+{% if not thursday_qst %} No data {% endif %}
+{% for service in thursday_qst %}
+<li>{{ service.date_time }} {{ service.service_id }} {{ service.appointment_id.patient_id.last_name }} {{ service.appointment_id.patient_id.first_name }}
+    {% if service.status %} Услуга оказана {% endif %}
+    {% comment %}{% if service.status %} если статус выполнено то можно выделить цветом {% endif %} {% endcomment %}
+</li>
+{% endfor %}
+<p>Пятница  {{ friday_date|date:"j F Y"  }} {% if friday_date|date:"Y-m-d" == today_date %} Если сегодня то выделить {% endif %}</p>
+{% if not friday_qst %} No data {% endif %}
+{% for service in friday_qst %}
+<li>{{ service.date_time }} {{ service.service_id }} {{ service.appointment_id.patient_id.last_name }} {{ service.appointment_id.patient_id.first_name }}
+    {% if service.status %} Услуга оказана {% endif %}
+    {% comment %}{% if service.status %} если статус выполнено то можно выделить цветом {% endif %} {% endcomment %}
+</li>
+{% endfor %}
+<p>Субота {{ saturday_date|date:"j F Y"  }} {% if saturday_date|date:"Y-m-d" == today_date %} Если сегодня то выделить {% endif %}</p>
+{% if not saturday_qst %} No data {% endif %}
+{% for service in saturday_qst %}
+<li>{{ service.date_time }} {{ service.service_id }} {{ service.appointment_id.patient_id.last_name }} {{ service.appointment_id.patient_id.first_name }}
+    {% if service.status %} Услуга оказана {% endif %}
+    {% comment %}{% if service.status %} если статус выполнено то можно выделить цветом {% endif %} {% endcomment %}
+</li>
+{% endfor %}
+<p>Воскресение {{ sunday_date|date:"j F Y"  }} {% if sunday_date|date:"Y-m-d" == today_date %} Если сегодня то выделить {% endif %}</p>
+{% if not sunday_qst %} No data {% endif %}
+{% for service in sunday_qst %}
+<li>{{ service.date_time }} {{ service.service_id }} {{ service.appointment_id.patient_id.last_name }} {{ service.appointment_id.patient_id.first_name }}
+    {% if service.status %} Услуга оказана {% endif %}
+    {% comment %}{% if service.status %} если статус выполнено то можно выделить цветом {% endif %} {% endcomment %}
+</li>
+{% endfor %}
+
+{% endblock %}
+
+

@@ -1,0 +1,11 @@
+{% extends '_main.html' %}
+{% load widget_tweaks %}
+{% block content %}
+{% include 'patients/include/_patient_menu.html' %}
+<h1>Журнал изменений МКБ10</h1>
+<h1>{{ instance }}</h1>
+<p>Дата изменения / Тип / Действие / Автор / Значение / Новое значение</p>
+{% for instance in instances %}
+<p>{{ instance.creation_date }} / {{ instance.type }} / {{ instance.action }} / {{ instance.author_id }} / {{ instance.title }} / {{ instance.title_new }}</p>
+{% endfor %}
+{% endblock %}

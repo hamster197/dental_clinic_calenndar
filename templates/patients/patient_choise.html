@@ -1,0 +1,30 @@
+{% extends '_main.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+<h1>Выбирите или введите нового пациента {{ request.COOKIES.name }}</h1>
+<strong>Введите Фамлию Имя И дату рождения в формате 1999-01-01</strong>
+<form method="post" action="{% url "patients_urls:patient_choise_url" %}">
+    {% csrf_token %}
+    <label {{ form.patient.id_for_label }}>{{ form.patient.label }}</label>
+
+    <input
+            type="text"
+            name="{{ form.patient.name }}"
+            id="{{ form.patient.id_for_label }}"
+            list="patient-options"
+            class="form-control"
+            value="{{ form.patient.value|default:'' }}"
+    >
+    {{ form.non_field_errors }} {{ form.patient.errors }}
+    <datalist id="patient-options">
+        {% for patient in patients %}
+            <option value="{{ patient }}">
+        {% endfor %}
+    </datalist>
+    <button type="submit">Submit</button>
+</form>
+
+
+{% endblock %}

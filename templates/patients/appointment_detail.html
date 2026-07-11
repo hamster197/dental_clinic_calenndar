@@ -1,0 +1,86 @@
+{% extends '_main.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% include 'patients/include/_patient_menu.html' %}
+
+<h1> редактор посешения {{ instance.date_created|date:"d-m-Y" }} {{ instance.patient_id.last_name }} {{ instance.patient_id.first_name }}</h1>
+
+<strong>Рекомендации {{ instance.recomendations|safe }}</strong></br>
+<strong>Прочее {{ instance.text|safe }}</strong>
+<p><a href="{% url "patients_urls:appointment_text_url" pk=instance.pk %}">Редактировать</a></p>
+
+<stromg>файлы</stromg>
+{% if instance.doctor_appointment_file_id.all %}
+{% for file in instance.doctor_appointment_file_id.all %}
+<p>{{ file.file.url }} {{ file.id }}<a href="{% url "patients_urls:appointment_galery_delete_url" pk=file.id %}">Удвлить</a></p>
+{% endfor %}
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="images" multiple required>
+    <button type="submit">Upload images</button>
+</form>
+
+<stromg>MKB10 <a href="{% url "patients_urls:appointment_mkb10_create_url" pk=instance.id %}">New</a></stromg>
+{% if instance.patients_mkb10doctorappointmentdata.all %}
+    {% for mkb in instance.patients_mkb10doctorappointmentdata.all %}}
+        <p>{{ mkb.mkb10_id }} <a href="{% url "patients_urls:appointment_mkb10_url" pk=mkb.id %}">Редактировать</a>
+            <a href="{% url "patients_urls:appointment_mkb10_delete_url" pk=mkb.id %}">Удвлить</a></p>
+    {% endfor %}
+{% else %}
+    <p>Добавьте диагноз</p>
+{% endif %}
+
+<stromg>Услуги <a href="{% url "patients_urls:appointment_service_create_url" pk=instance.id %}">New</a></stromg>
+<strong>Оплачено{{ appointment_sum.payed }} Долг {{ appointment_sum.debt }} Итого {{ appointment_sum.total_sum }} </strong>
+{% if instance.patients_serviceappointmentdata.all %}
+    {% for service in instance.patients_serviceappointmentdata.all %}
+        <p>{{ service.service_id }} {{ service.doctor_id }} {{ service.date_time }} {{ service.service_id.price_base }} руб
+                {% if service.status %} Оплачено {% else %} Не плачено{% endif %}
+{% if service.status == False %}
+            <a href="{% url "patients_urls:appointment_service_url" pk=service.id %}">Редактировать</a>
+            <a href="{% url "patients_urls:appointment_service_delete_url" pk=service.id %}">Удвлить</a></p>
+{% endif %}
+    {% endfor %}
+{% else %}
+<p>Добавьте Услуги</p>
+{% endif %}
+
+<h1>Зубная формула</h1>
+<strong>Врерхняя часть</strong>
+{% for obj in dental_formula_up %}
+    <p>{{ obj.dental_formula_id.tooth_number }}
+    {% if obj.comment %}
+        {{  obj.dental_formula_id.checked_image.url }} {{ obj.comment|safe }} {{ obj.author_id.last_name }} {{ obj.author_id.first_name }}
+    {% else %}
+        {{  obj.dental_formula_id.image.url }}
+    {% endif %}
+    <a href="{% url "patients_urls:appointment_dental_formula_url" pk=obj.id %}">Редактировать</a></p>
+    </p>
+{% endfor %}
+
+<strong>нижняя часть</strong>
+{% for obj in dental_formula_down %}
+<p>{{ obj.dental_formula_id.tooth_number }}
+    {% if obj.comment %}
+        {{  obj.dental_formula_id.checked_image.url }} {{ obj.comment|safe }} {{ obj.author_id.last_name }} {{ obj.author_id.first_name }}
+    {% else %}
+        {{  obj.dental_formula_id.image.url }}
+    {% endif %}
+    <a href="{% url "patients_urls:appointment_dental_formula_url" pk=obj.id %}">Редактировать</a></p>
+</p>
+{% endfor %}
+
+{% endblock %}
+
+
+

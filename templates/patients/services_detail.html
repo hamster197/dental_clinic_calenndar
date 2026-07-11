@@ -1,0 +1,55 @@
+{% extends '_main.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<h1>Услуга подробно</h1>
+
+<p>Создал {{ service.author_id }}</p>
+<p><a href="{% url "patients_urls:appointment_update_url" pk=service.appointment_id.pk %}">Прием {{ service.appointment_id }} </a></p>
+<p>Дата создания{{ service.date_created }}</p>
+<p>Услуга {{ service.service_id }} {{ service.service_id.price_base }} rub</p>
+<p>Доктор(Кто выполнит) {{ service.doctor_id }}</p>
+<p>Дата вызова для оказания улуги{{ service.date_time }}</p>
+<p>{% if service.status %} Услуга оказана
+    {% else %}
+    Услуга не оказана
+<form method="post">
+{% csrf_token %}
+
+<button type="submit">Изменить статус услуги</button>
+</form>
+ {% endif %}</p>
+
+<h1>Зубная формула</h1>
+<strong>Врерхняя часть</strong>
+{% for obj in dental_formula_up %}
+<p>{{ obj.dental_formula_id.tooth_number }}
+    {% if obj.comment %}
+    {{  obj.dental_formula_id.checked_image.url }} {{ obj.comment|safe }} {{ obj.author_id.last_name }} {{ obj.author_id.first_name }}
+    {% else %}
+    {{  obj.dental_formula_id.image.url }}
+    {% endif %}
+</p>
+{% endfor %}
+
+<strong>нижняя часть</strong>
+{% for obj in dental_formula_down %}
+<p>{{ obj.dental_formula_id.tooth_number }}
+    {% if obj.comment %}
+    {{  obj.dental_formula_id.checked_image.url }} {{ obj.comment|safe }} {{ obj.author_id.last_name }} {{ obj.author_id.first_name }}
+    {% else %}
+    {{  obj.dental_formula_id.image.url }}
+    {% endif %}
+</p>
+{% endfor %}
+
+{% endblock %}

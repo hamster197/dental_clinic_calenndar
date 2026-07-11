@@ -1,0 +1,20 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<div>
+    <strong>Файл с рсширением CSV </strong>
+    <form action="." method="POST" enctype="multipart/form-data">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit">Загрузка прайса из CSV файла</button>
+    </form>
+    <strong>Формат файла: </strong></br>
+    <strong>code,title,category,subcategory,base,Group_a,Group_b,Group_ls,Croup_Ch_B </strong>
+    {% if prais_new != 0 %}
+    <h1>Дабавленно {{ prais_new }} новых позиций</h1>
+    {% endif %}
+    {% if praise_updated != 0 %}
+    <h1>Обновленно {{ praise_updated }}  позиций</h1>
+    {% endif %}
+</div>
+{% endblock %}

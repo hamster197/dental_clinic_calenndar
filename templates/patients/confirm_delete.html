@@ -1,0 +1,28 @@
+{% comment %} make it as Popup Window {% endcomment %}
+{% load widget_tweaks %}
+
+<h1>Popup Window</h1>
+{{ object.model_name }}
+{% if object.model_name == 'doctorappointmentfile' %}
+  <form method="post" action="{% url "patients_urls:appointment_galery_delete_url" pk=object.pk %}">
+{% elif object.model_name == 'mkb10doctorappointmentdata' %}
+  <form method="post" action="{% url "patients_urls:appointment_mkb10_delete_url" pk=object.pk %}">
+{% elif object.model_name == 'serviceappointmentdata' %}
+  <form method="post" action="{% url "patients_urls:appointment_service_delete_url" pk=object.pk %}">
+
+{% endif %}
+
+  {% csrf_token %}
+<input type="hidden" name="pk" value="{{ object.pk }}">
+  <p>Are you sure you want to delete "{{ object }} "?</p>
+
+  <button type="submit">Confirm Delete</button>
+{% if object.model_name == 'doctorappointmentfile' %}
+  <a href="{% url "patients_urls:appointment_update_url" pk=object.parent_id.pk %}">Cancel</a>
+{% else %}
+  <a href="{% url "patients_urls:appointment_update_url" pk=object.appointment_id.pk %}">Cancel</a>
+{% endif %}
+
+</form>
+
+

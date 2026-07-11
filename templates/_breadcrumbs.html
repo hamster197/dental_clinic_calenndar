@@ -1,0 +1,23 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        {% for crumb in breadcrumbs %}
+
+        <a href="{{ crumb.url }}">{{ crumb.title }} </a></p>
+
+        {% endfor %}
+    </ol>
+</nav>
+
+
+
+
+{% comment %}
+{% if breadcrumbs == 'patient_detail' %}
+<a href="{% url "patients_urls:patient_detail_url" pk=patient.pk %}">{{ patient.first_name }} {{ patient.last_name }} {{ patient.patronymic }} Карта прииема </a></p>
+
+{% elif breadcrumbs == 'patient_update' %}
+<a href="{% url "patients_urls:patient_detail_url" pk=form.instance.pk %}">{{ patient.first_name }} {{ patient.last_name }} {{ patient.patronymic }} Карта прииема </a></p>
+<a href="{% url "patients_urls:patient_update_url" pk=form.instance.pk %}">{{ patient.first_name }} {{ patient.last_name }} {{ patient.patronymic }} Редактор профиля </a></p>
+
+{% endif %}
+{% endcomment %}

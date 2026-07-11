@@ -1,0 +1,28 @@
+{% extends '_main.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<h1>Login page</h1>
+
+
+
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li class="{{ message.tags }}">{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<form id="login" method="post" >
+  {% csrf_token %}
+
+  {{ form.as_p }}
+
+  <input type="submit" value="Войти" class="lr-button lr-button-default lr-width-1-1 lr-text-xsmall" >
+</form>
+<a href="{% url "accounts_urls:reset_password_url"  %}" >Forgot password?</a>
+
+{% endblock %}
+{{ form.non_field_errors }}
+<p>{{ form.username.label }} {{ form.username }} {{ form.username.errors }}</p>
+<p>{{ form.password.label }} {{ form.password }} {{ form.password.errors }}</p>

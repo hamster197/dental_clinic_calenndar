@@ -1,0 +1,40 @@
+{% extends '_main.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+{% now "Y-m-d" as today_date %}
+
+{% if appointments.first.date_created|date:"Y-m-d" != today_date %}
+<a href="{% url "patients_urls:appointment_new_url" pk=patient.pk %}">Создать новый прием пациента </a>
+{% endif %}
+
+<a href="{% url "patients_urls:patient_update_url" pk=patient.pk %}">Редактировать данные пациента </a>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h1>Карта приемов пациента</h1>
+
+<strong>{{ patient.first_name }} {{ patient.last_name }} {{ patient.patronymic }} зарегестрирован {{ patient.date_joined }}
+    {{ patient.pacient_profile_user_idd.ate_birth }} {{ patient.email }} {{ patient.phone }}
+    </strong>
+
+{% if appointments.count == 0 %}
+<p>у пациента нет посещений! добавть новое посешения для работы</p>
+{% else %}
+    {% for appointment in appointments %}
+</br>
+<a href="{% url "patients_urls:appointment_update_url" pk=appointment.pk  %}">Посещение: дата - {{ appointment.date_created }}, мкб10   {{ appointment.mkb10_sum }} услуг {{ appointment.service_sum }}
+Итого {{ appointment.total_sum }} Оплачено {{ appointment.payed }} Долг {{ appointment.debt }}   </a>
+
+    {% endfor %}
+{% endif %}
+
+{% endblock %}
+
+

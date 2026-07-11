@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Django App</title>
+    {{ form.media }}
+</head>
+
+<h1>Popup Window</h1>
+
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h1>{{ form.model_verbose_name }} {% if form.instance.dental_formula_id.tooth_number %}
+    Зуб {{ form.instance.dental_formula_id.tooth_number }} {{ form.instance.dental_formula_id.get_position_vertical_display  }} {% endif %}</h1>
+<p>{{ form.instance.dental_formula_id.image.url }}</p>
+{% if appointment__title == 'appointment_update' %}
+    <h1> редактор посешения {{ form.instance.appointment_id.date_created|date:"d-m-Y" }} {{ form.instance.appointment_id.patient_id.last_name }} {{ form.instance.appointment_id.patient_id.first_name }}</h1>
+    {% if form.model_name == 'DoctorAppointment' %}
+        <form method="post" action="{% url "patients_urls:appointment_text_url" pk=form.instance.pk %}">
+    {% elif form.model_name == 'MKB10DoctorAppointmentData' %}
+        <form method="post" action="{% url "patients_urls:appointment_mkb10_url" pk=form.instance.pk %}">
+    {% elif form.model_name == 'ServiceAppointmentData' %}
+        <form method="post" action="{% url "patients_urls:appointment_service_url" pk=form.instance.pk %}">
+    {% elif form.model_name == 'DentalFormulaAppointment' %}
+        <form method="post" action="{% url "patients_urls:appointment_dental_formula_url" pk=form.instance.pk %}">
+
+{% endif %}
+{% else %}
+    <h1>Новое посешение {{ appointment.date_created|date:"d-m-Y" }} {{ appointment.patient_id.last_name }} {{ appointment.patient_id.first_name }}</h1>
+{% if form.model_name == 'MKB10DoctorAppointmentData' %}
+    <form method="post" action="{% url "patients_urls:appointment_mkb10_create_url" pk=appointment.pk %}">
+{% elif form.model_name == 'ServiceAppointmentData' %}
+    <form method="post" action="{% url "patients_urls:appointment_service_create_url" pk=appointment.pk %}">
+{% endif %}
+
+{% endif %}
+
+
+
+    {% csrf_token %}
+    {{ form }}
+
+<button type="submit">Submit</button>
+</form>
+
+
+
+{% comment %}
+<form method="post"  ">
+{% elif user_role == 'editor' %}
+{% endcomment %}
+
+
+

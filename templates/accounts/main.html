@@ -1,0 +1,16 @@
+{% extends '_main.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+<h1>main calendar </h1>
+
+<form method="post">
+    {% csrf_token %}
+
+
+    <button type="submit">Submit</button>
+</form>
+
+
+{% endblock %}
