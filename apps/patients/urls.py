@@ -1,7 +1,7 @@
 from django.urls import path
 
 from apps.patients.forms import AppointmentTextForm, MKB10DoctorAppointmentDataForm, ServiceAppointmentDataForm, \
-    DentalFormulaAppointmentForm
+    DentalFormulaAppointmentForm, ServiceAppointmentCreateForm
 from apps.patients.models import DoctorAppointmentFile, DoctorAppointment, MKB10DoctorAppointmentData, \
     ServiceAppointmentData, DentalFormulaAppointment
 from apps.patients.views import PatientChoiseView, PatientDetailView, PatientCreateView, PatientUpdateView, \
@@ -29,7 +29,7 @@ urlpatterns = [
     path('appointment/service_delete/<uuid:pk>/', DoctorAppointmentInstancesDeleteView.as_view(model=ServiceAppointmentData), name='appointment_service_delete_url'),
     # Creates
     path('appointment/mkb10_create/<int:pk>/', AppointmentCreateView.as_view(form_class=MKB10DoctorAppointmentDataForm, model=MKB10DoctorAppointmentData), name='appointment_mkb10_create_url'),
-    path('appointment/service_create/<int:pk>/', AppointmentCreateView.as_view(form_class=ServiceAppointmentDataForm, model=ServiceAppointmentData), name='appointment_service_create_url'),
+    path('appointment/service_create/<int:pk>/', AppointmentCreateView.as_view(form_class=ServiceAppointmentCreateForm, model=ServiceAppointmentData), name='appointment_service_create_url'),
     # Logs
     path('logs/mkb/<int:pk>/', DoctorJournalView.as_view(type='mkb10'), name='logs_mkb_url'),
     path('logs/service/<int:pk>/', DoctorJournalView.as_view(type='service'), name='logs_services_url'),

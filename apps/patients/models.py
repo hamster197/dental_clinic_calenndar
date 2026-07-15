@@ -80,7 +80,7 @@ class ServiceAppointmentData(AbstractDoctorAppointmentData):
     doctor_id = models.ForeignKey(get_user_model(), verbose_name='Доктор',
                                   on_delete=models.CASCADE, related_name='service_doctor_appointment_id',)
     date_time = models.DateTimeField('Дата приема', )
-    status = models.BooleanField('Услуга оказана?', )
+    status = models.BooleanField('Услуга оказана?', default=False)
 
     class Meta:
         verbose_name = 'Услуга'

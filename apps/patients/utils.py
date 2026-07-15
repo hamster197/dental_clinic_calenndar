@@ -19,14 +19,17 @@ def is_valid_date(date_string, date_format="%Y-%m-%d"):
 
 def check_correct_patient_data_in_string(txt):
     result = True
-    data = txt.split()
-    if len(data) != 3:
-        result = False
-    else:
-        import re
-        date = re.findall(r'\d{4}-\d{2}-\d{2}',  data[2])
-        if len(date) != 1 or len(data[0]) == 1 or len(data[1]) == 1 or len(data[2]) != 10 or not is_valid_date(data[2]):
+    if txt:
+        data = txt.split()
+        if len(data) != 3:
             result = False
+        else:
+            import re
+            date = re.findall(r'\d{4}-\d{2}-\d{2}',  data[2])
+            if len(date) != 1 or len(data[0]) == 1 or len(data[1]) == 1 or len(data[2]) != 10 or not is_valid_date(data[2]):
+                result = False
+    else:
+        result = False
 
     return result
 

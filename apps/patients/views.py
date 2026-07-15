@@ -10,7 +10,7 @@ from datetime import datetime
 from apps.accounts.models import User
 from apps.journals.models import Mkb10ServiceJournal
 from apps.patients.forms import PatientForm, PatientEditForm, AppointmentTextForm, MKB10DoctorAppointmentDataForm, \
-    ServiceAppointmentDataForm, DentalFormulaAppointmentForm
+    ServiceAppointmentDataForm, DentalFormulaAppointmentForm, ServiceAppointmentCreateForm
 from apps.patients.models import DoctorAppointment, ServiceAppointmentData, \
     MKB10DoctorAppointmentData
 from apps.patients.utils import get_all_patients, get_a_patient, create_or_update_pacient_profile, \
@@ -316,7 +316,7 @@ class AppointmentCreateView(DoctorExistsMixin, CreateView):
         messages.success(self.request, 'Данные успешно сохранены!')
         if self.form_class == MKB10DoctorAppointmentDataForm:
             url = reverse_lazy('patients_urls:appointment_mkb10_url', kwargs={'pk':instance.id})
-        elif self.form_class == ServiceAppointmentDataForm:
+        elif self.form_class == ServiceAppointmentCreateForm:
             url = reverse_lazy('patients_urls:appointment_service_url', kwargs={'pk':instance.id })
 
         return url

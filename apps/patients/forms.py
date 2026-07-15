@@ -49,6 +49,7 @@ class PatientEditForm(forms.ModelForm):
         return cleaned_data
 
 class AppointmentForm(forms.ModelForm):
+
     @property
     def model_verbose_name(self):
         return self._meta.model._meta.verbose_name
@@ -94,6 +95,11 @@ class ServiceAppointmentDataForm(AppointmentForm):
         self.fields['doctor_id'].queryset = get_user_model().objects.filter(groups__name="Врач")
         self.fields['doctor_id'].initial = user_id
         self.fields['date_time'].initial = datetime.now()
+
+class ServiceAppointmentCreateForm(ServiceAppointmentDataForm):
+
+    class Meta(ServiceAppointmentDataForm.Meta):
+        fields = ['service_id', 'doctor_id', 'date_time', ]
 
 
 class DentalFormulaAppointmentForm(AppointmentForm):
