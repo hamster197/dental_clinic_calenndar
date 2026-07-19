@@ -1,7 +1,10 @@
 import uuid
+
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
 from tinymce.models import HTMLField
+from datetime import timedelta
 
 
 from apps.guides.models import MKB10Quide, PriceQuide, DentalFormula
@@ -80,12 +83,31 @@ class ServiceAppointmentData(AbstractDoctorAppointmentData):
     doctor_id = models.ForeignKey(get_user_model(), verbose_name='Доктор',
                                   on_delete=models.CASCADE, related_name='service_doctor_appointment_id',)
     date_time = models.DateTimeField('Дата приема', )
+    date_end = models.DateTimeField('Дата окончания ', blank=True, null=True)
     status = models.BooleanField('Услуга оказана?', default=False)
 
     class Meta:
         verbose_name = 'Услуга'
         verbose_name_plural = 'Прием пациента Услуги'
         ordering = ['date_time',]
+
+    def get_date_end(self, date_time):
+        return date_time + timedelta(minutes=self.service_id.duration)
+
+    def clean(self):
+        super().clean()
+        qst = ServiceAppointmentData.objects.filter(status=False, doctor_id=self.doctor_id,).exclude(pk=self.pk)
+        date_end = self.get_date_end(self.date_time)
+
+        from django.db.models import Q
+        result_qst = qst.filter(Q(date_time__lte=self.date_time, date_end__gte=self.date_time) | Q(date_time__lte=date_end, date_end__gte=date_end))
+
+        if result_qst.count() != 0:
+            raise ValidationError('Окно занято-измените дату-время!')
+
+    def save(self, *args, **kwargs):
+        self.date_end = self.get_date_end(self.date_time)
+        return super(ServiceAppointmentData, self).save(*args, **kwargs)
 
 class DentalFormulaAppointment(models.Model):
     appointment_id = models.ForeignKey(DoctorAppointment, verbose_name='Прием',

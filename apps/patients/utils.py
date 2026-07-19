@@ -155,3 +155,4 @@ def get_dental_formula(obj):
     qst = obj.dental_formula_appointment_id.all().select_related('dental_formula_id', 'author_id',)
 
     return qst.filter(dental_formula_id__position_vertical=ToothChoises.Up),  qst.filter(dental_formula_id__position_vertical=ToothChoises.Down)
+

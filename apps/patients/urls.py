@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, register_converter
 
 from apps.patients.forms import AppointmentTextForm, MKB10DoctorAppointmentDataForm, ServiceAppointmentDataForm, \
     DentalFormulaAppointmentForm, ServiceAppointmentCreateForm
@@ -6,9 +6,22 @@ from apps.patients.models import DoctorAppointmentFile, DoctorAppointment, MKB10
     ServiceAppointmentData, DentalFormulaAppointment
 from apps.patients.views import PatientChoiseView, PatientDetailView, PatientCreateView, PatientUpdateView, \
     AppointmentUpdatelView, AppointmentFormView, DoctorAppointmentInstancesDeleteView, AppointmentCreateView, \
-    NewApointmentVew, DoctorJournalView, ServiceDetailView
+    NewApointmentVew, DoctorJournalView, ServiceDetailView, BusyWindowsListJsonView, DoctorBusyWindowsListJsonView
 
 app_name = 'patients_urls'
+
+class DateConverter:
+    regex = '\d{4}-\d{2}-\d{2}'
+
+    def to_python(self, value):
+        from datetime import datetime
+
+        return datetime.strptime(value, '%Y-%m-%d')
+
+    def to_url(self, value):
+        return value
+
+register_converter(DateConverter, 'date')
 
 urlpatterns = [
     path('patient_choise/', PatientChoiseView.as_view(), name='patient_choise_url'),
@@ -36,5 +49,8 @@ urlpatterns = [
 
     # path('calendar/', CalendarView.as_view(), name='calendar_url'),
     path('appointment/service_detail/<uuid:pk>/', ServiceDetailView.as_view(), name='appointment_service_detail_url'),
+
+    path('appointment/windows_detail/<int:doctor_id>/<date:date>/', BusyWindowsListJsonView.as_view(), ),
+    path('appointment/doc_windows_detail/<int:doctor_id>/', DoctorBusyWindowsListJsonView.as_view(), ),
 
 ]

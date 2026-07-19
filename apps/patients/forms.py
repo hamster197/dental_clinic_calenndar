@@ -77,12 +77,19 @@ class MKB10DoctorAppointmentDataForm(AppointmentForm):
         self.fields['mkb10_id'].queryset = qst
 
 class ServiceAppointmentDataForm(AppointmentForm):
-    date_time = forms.DateTimeField(
-        widget=forms.DateTimeInput(
-            format='%Y-%m-%dT%H:%M',
-            attrs={'type': 'datetime-local'}
-        ),
-        input_formats=['%Y-%m-%dT%H:%M']
+    # date_time = forms.DateTimeField(
+    #     widget=forms.DateTimeInput(
+    #         format='%Y-%m-%dT%H:%M',
+    #         attrs={'type': 'datetime-local'}
+    #     ),
+    #     input_formats=['%Y-%m-%dT%H:%M']
+    # )
+    date_time = forms.SplitDateTimeField(
+        widget=forms.SplitDateTimeWidget(
+            date_attrs={'type': 'date'},
+            date_format='%Y-%m-%d',
+            time_attrs={'type': 'time'}
+        )
     )
 
     class Meta:
@@ -96,10 +103,19 @@ class ServiceAppointmentDataForm(AppointmentForm):
         self.fields['doctor_id'].initial = user_id
         self.fields['date_time'].initial = datetime.now()
 
+
 class ServiceAppointmentCreateForm(ServiceAppointmentDataForm):
 
     class Meta(ServiceAppointmentDataForm.Meta):
         fields = ['service_id', 'doctor_id', 'date_time', ]
+
+    def clean(self):
+        cleaned_data = super(ServiceAppointmentCreateForm, self).clean()
+        from django.utils import timezone
+        if cleaned_data['date_time'] < timezone.now().astimezone():
+            raise ValidationError('Дата и время меньше сейчас!', code='invalid')
+
+        return cleaned_data
 
 
 class DentalFormulaAppointmentForm(AppointmentForm):

@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView, RedirectView
@@ -429,3 +430,27 @@ class ServiceDetailView(DoctorExistsMixin, DetailView):
         messages.success(self.request, 'Данные успешно сохранины!')
 
         return self.render_to_response(context)
+
+
+class BusyWindowsListJsonView(DoctorExistsMixin, ListView):
+
+    def get_queryset(self):
+        return ServiceAppointmentData.objects.filter(status=False, doctor_id=self.kwargs['doctor_id'],
+                                                     date_time__date=self.kwargs['date'],)
+
+    def render_to_response(self, context, **response_kwargs):
+        queryset = self.get_queryset().values('date_time', 'date_end', )
+        data = list(queryset)
+
+        return JsonResponse(data, safe=False)
+
+class DoctorBusyWindowsListJsonView(DoctorExistsMixin, ListView):
+
+    def get_queryset(self):
+        return ServiceAppointmentData.objects.filter(status=False, doctor_id=self.kwargs['doctor_id'], )
+
+    def render_to_response(self, context, **response_kwargs):
+        queryset = self.get_queryset().values('date_time', 'date_end', )
+        data = list(queryset)
+
+        return JsonResponse(data, safe=False)

@@ -36,7 +36,7 @@ class PraisSubCategoryModelAdmin(admin.ModelAdmin):
 
 @admin.register(PriceQuide)
 class PriceQuideModelAdmin(admin.ModelAdmin):
-    list_display = [ 'code', 'title', 'subcategoty_id', 'price_base',]
+    list_display = [ 'code', 'title', 'subcategoty_id', 'price_base', 'duration',]
     list_filter = ['subcategoty_id',  ]
     search_fields = ['code', 'title', ]
     search_help_text = 'Название и код'

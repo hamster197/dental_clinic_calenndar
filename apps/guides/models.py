@@ -72,6 +72,7 @@ class PriceQuide(models.Model):
     title = models.CharField('Название', max_length=255, )
     subcategoty_id = models.ForeignKey(PraisSubCategory, verbose_name='Подкатегория', on_delete=models.CASCADE,
                                        related_name='price_subcategoty_id')
+    duration = models.PositiveIntegerField('Продолжительность выполнения услуги', default=20, )
     price_base = models.PositiveIntegerField('Цена базовая')
     price_croup_a = models.PositiveIntegerField('Цена группа А', )
     price_croup_b = models.PositiveIntegerField('Цена группа Б', )

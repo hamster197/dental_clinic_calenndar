@@ -20,4 +20,4 @@ class DoctorAppointmentModelAdmin(admin.ModelAdmin):
     list_display = [ 'pk', 'date_created', 'author_id', 'patient_id',]
     list_filter = ['author_id',  'patient_id', ]
     inlines = [DoctorAppointmentFileModelAdmin, MKB10DoctorAppointmentDataModelAdmin,
-               ServiceAppointmentDataaModelAdmin, DentalFormulaAppointmentModelAdmin ]
+               ServiceAppointmentDataaModelAdmin, DentalFormulaAppointmentModelAdmin ]#,
