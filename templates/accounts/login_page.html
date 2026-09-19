@@ -1,7 +1,7 @@
 {% extends '_main.html' %}
 {% load widget_tweaks %}
-{% block content %}
-<h1>Login page</h1>
+{% block content %}<div class="lr-flex lr-flex-center lr-flex-middle lr-height-viewport">
+
 
 
 
@@ -13,15 +13,28 @@
 </ul>
 {% endif %}
 
-<form id="login" method="post" >
+  <div class="lr-card lr-card-default lr-card-body lr-width-large">
+<h3>Вход в систему</h3>
+
+<form id="login" class="lr-form-stacked" method="post" >
   {% csrf_token %}
 
-  {{ form.as_p }}
+<div class="lr-text-danger">{{ form.non_field_errors }}</div>
+	<div class="lr-margin-small">
+    <label class="lr-form-label">{{ form.username.label }}</label>  <div class="lr-form-controls">{% render_field form.username class="lr-input" %} {{ form.username.errors }}</div>
+	</div>
+	<div class="lr-margin-small">
+    <label class="lr-form-label">{{ form.password.label }}</label>  <div class="lr-form-controls">{% render_field form.password class="lr-input" %} {{ form.password.errors }}</div>
+	</div>
+	<div class="lr-margin">
+    <input type="submit" value="Войти" class="lr-button lr-button-primary lr-width-1-1 lr-text-xsmall" >
+	</div>
 
-  <input type="submit" value="Войти" class="lr-button lr-button-default lr-width-1-1 lr-text-xsmall" >
+  
 </form>
-<a href="{% url "accounts_urls:reset_password_url"  %}" >Forgot password?</a>
-
+<a href="{% url "accounts_urls:reset_password_url"  %}" >Забыли пароль?</a>
+  </div>
+</div>
 {% endblock %}
 {{ form.non_field_errors }}
 <p>{{ form.username.label }} {{ form.username }} {{ form.username.errors }}</p>

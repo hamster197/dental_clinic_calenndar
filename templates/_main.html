@@ -1,9 +1,23 @@
+<html lang="ru-RU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="msapplication-TileColor" content="#0642a1">
+<meta name="theme-color" content="#0642a1">
+<title>Календарь для стоматологии </title>
+<!-- #стили -->
+<link href="/static/front-dent/style.css" rel="stylesheet" type="text/css" />
+<script src="/static/front-dent/jquery-3.7.1.min.js"></script>
+<!-- #стили -->
+</head>
+<body>
 {% load static %}
 
 
-{% include '_breadcrumbs.html' %}
+
 
 {% if user.is_authenticated %}
+{% include '_breadcrumbs.html' %}
 <p> {{ request.user.last_name }} {{ request.user.first_name|slice:"1" }}. {{ request.user.patronymic|slice:"1" }}. </p>
 <a href="{% url "accounts_urls:password_change" %}">change password </a></p>
 <a href="{% url "accounts_urls:main_url" %}">Календарь </a></p>
@@ -11,14 +25,21 @@
 
 <form method="post" action="{% url 'accounts_urls:logout_url' %}">
     {% csrf_token %}
-    <button class="lr-button lr-button-primary lr-button-small lr-text-small" type="submit">Log out</button>
+    <button class="lr-button lr-button-primary lr-button-small lr-text-small" type="submit">Выход</button>
 </form>
 
 
 {% else %}
-<a href="{% url "accounts_urls:login_url"  %}" >Login </a>
+<!-- #<a href="{% url "accounts_urls:login_url"  %}" >Login </a> -->
 {%endif %}
 
 {% block content %}
 
 {% endblock %}
+<!-- #скрипты -->
+<script src="/static/front-dent/sistem-1.js"></script>
+<script src="/static/front-dent/sistem-2.js"></script>
+
+<!-- #скрипты -->
+</body>
+</html>
