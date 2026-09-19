@@ -3,12 +3,12 @@ from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView, RedirectView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView, RedirectView, TemplateView
 from django.core.cache import cache
 from django.contrib import messages
 from datetime import datetime
 
-from apps.accounts.models import User
+from apps.accounts.models import User, PacientProfile
 from apps.journals.models import Mkb10ServiceJournal
 from apps.patients.forms import PatientForm, PatientEditForm, AppointmentTextForm, MKB10DoctorAppointmentDataForm, \
     ServiceAppointmentDataForm, DentalFormulaAppointmentForm, ServiceAppointmentCreateForm
@@ -57,6 +57,36 @@ class PatientChoiseView(DoctorExistsMixin, ListView):
 
         return render(request, self.template_name, {'form':form, 'patients':self.get_queryset()})
 
+class PatientChoiseHTMXView(DoctorExistsMixin, TemplateView):
+    template_name = 'patients/patient_choise_htmx.html'
+
+    def get_breadcrumbs(self):
+        crumbs = []
+        crumbs.append({'title': 'Главаная(каледарь)',  'url': DOCTOR_BREADCRUMBS_URL})
+        crumbs.append({'title': 'Прием пациента',  'url': reverse_lazy('patients_urls:patient_choise_url')})
+
+        return crumbs
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        yeasrs = []
+        for i in range(1930, 2030):
+            yeasrs.append(i)
+        context['breadcrumbs'] = self.get_breadcrumbs()
+        context['yeasrs'] = yeasrs
+        return context
+
+    def post(self, request, *args, **kwargs):
+        return redirect('patients_urls:patient_detail_url', pk=request.POST.get('model'))
+
+class PatientChoiseHTMXUsersListView(DoctorExistsMixin, TemplateView):
+    template_name = 'patients/include/patient_choise_htmx.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['users'] = PacientProfile.objects.filter(user_id__groups__name='Пациент', date_birth__year=self.request.GET.get('make'))
+        return context
+
 class PatientDetailView(DoctorExistsMixin, DetailView):
     template_name = 'patients/patient_detail.html'
     model = get_user_model()
@@ -80,9 +110,9 @@ class PatientDetailView(DoctorExistsMixin, DetailView):
 
 class PatientCreateView(DoctorExistsMixin, CreateView):
     template_name = 'patients/patient_update.html'
-    first_name = None
-    last_name = None
-    email = None
+    # first_name = None
+    # last_name = None
+    # email = None
     model = get_user_model()
     form_class = PatientEditForm
 
@@ -96,31 +126,30 @@ class PatientCreateView(DoctorExistsMixin, CreateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['breadcrumbs'] = self.get_breadcrumbs()
-
         return context
 
-    def get_data_from_cache(self):
-        cache_key = f"user_profile_data_{self.request.user.id}"
-        return cache.get(cache_key, )
-
-    def get_initial(self):
-        initial = super().initial.copy()
-        data = self.get_data_from_cache()
-        if data is not None:
-            initial['first_name'] = data[1]
-            initial['last_name'] = data[0]
-
-        return initial
+    # def get_data_from_cache(self):
+    #     cache_key = f"user_profile_data_{self.request.user.id}"
+    #     return cache.get(cache_key, )
     #
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        data = self.get_data_from_cache()
-        if data:
-            kwargs.update({'date_birth': data[2] })
-        else:
-            kwargs.update({'date_birth': '' })
-
-        return kwargs
+    # def get_initial(self):
+    #     initial = super().initial.copy()
+    #     data = self.get_data_from_cache()
+    #     if data is not None:
+    #         initial['first_name'] = data[1]
+    #         initial['last_name'] = data[0]
+    #
+    #     return initial
+    # #
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     data = self.get_data_from_cache()
+    #     if data:
+    #         kwargs.update({'date_birth': data[2] })
+    #     else:
+    #         kwargs.update({'date_birth': '' })
+    #
+    #     return kwargs
 
     def form_valid(self, form):
         super().form_valid(form)

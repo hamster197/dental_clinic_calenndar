@@ -29,10 +29,10 @@ class PatientEditForm(forms.ModelForm):
         model = get_user_model()
         fields = ['email', 'first_name', 'last_name', 'patronymic', 'phone', 'date_birth', ]
 
-    def __init__(self, *args, **kwargs):
-        date_birth = kwargs.pop("date_birth")
-        super().__init__(*args, **kwargs)
-        self.fields['date_birth'].initial = date_birth
+    # def __init__(self, *args, **kwargs):
+    #     date_birth = kwargs.pop("date_birth")
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['date_birth'].initial = date_birth
 
     def clean(self):
         cleaned_data = super(PatientEditForm, self).clean()

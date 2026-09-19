@@ -56,8 +56,10 @@ def check_for_correct_user_input_with_date_birth(first_name, last_name, date_bir
     return users.exists()
 
 def create_or_update_pacient_profile(user_id, date_birth):
-    PacientProfile.objects.update_or_create(
+    user, created = PacientProfile.objects.update_or_create(
         user_id=user_id, defaults={"date_birth": date_birth} )
+    from django.contrib.auth.models import Group
+    user.user_id.groups.add(Group.objects.get(name='Пациент'))
 
 def appointments_list_with_counts(appointments_id):
     queryset = DoctorAppointment.objects.filter(patient_id=appointments_id).annotate(

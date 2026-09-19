@@ -1,0 +1,34 @@
+{% extends '_main.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.10/dist/htmx.min.js" integrity="sha384-H5SrcfygHmAuTDZphMHqBJLc3FhssKjG7w/CeCpFReSfwBWDTKpkzPP8c+cLsK+V" crossorigin="anonymous"></script>
+
+<a href="{% url "patients_urls:patient_create_url" %}">Новый пациент </a>
+
+<h1>Выбирите или введите нового пациента {{ request.COOKIES.name }}</h1>
+<strong>Введите Фамлию Имя И дату рождения в формате 1999-01-01</strong>
+<form method="post" %}">
+{% csrf_token %}
+
+<div>
+    <label >Make</label>
+    <select name="make" hx-get="/patient/users_list/" hx-target="#models" hx-indicator=".htmx-indicator">
+        {% for year in yeasrs %}
+        <option value="{{ year }}">{{ year }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div>
+    <label>Model</label>
+    <select id="models" name="model">
+
+    </select>
+</div>
+
+<button type="submit">Submit</button>
+</form> {
+
+{{ year }}
+
+
+{% endblock %}

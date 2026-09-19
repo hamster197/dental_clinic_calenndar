@@ -6,7 +6,8 @@ from apps.patients.models import DoctorAppointmentFile, DoctorAppointment, MKB10
     ServiceAppointmentData, DentalFormulaAppointment
 from apps.patients.views import PatientChoiseView, PatientDetailView, PatientCreateView, PatientUpdateView, \
     AppointmentUpdatelView, AppointmentFormView, DoctorAppointmentInstancesDeleteView, AppointmentCreateView, \
-    NewApointmentVew, DoctorJournalView, ServiceDetailView, BusyWindowsListJsonView, DoctorBusyWindowsListJsonView
+    NewApointmentVew, DoctorJournalView, ServiceDetailView, BusyWindowsListJsonView, DoctorBusyWindowsListJsonView, \
+    PatientChoiseHTMXView, PatientChoiseHTMXUsersListView
 
 app_name = 'patients_urls'
 
@@ -24,7 +25,9 @@ class DateConverter:
 register_converter(DateConverter, 'date')
 
 urlpatterns = [
-    path('patient_choise/', PatientChoiseView.as_view(), name='patient_choise_url'),
+    # path('patient_choise/', PatientChoiseView.as_view(), name='patient_choise_url'),
+    path('patient_choise/', PatientChoiseHTMXView.as_view(), name='patient_choise_url'),
+    path('users_list/', PatientChoiseHTMXUsersListView.as_view(), name='patient_choise_users_list_url'),
     path('patient_create/', PatientCreateView.as_view(), name='patient_create_url'),
     path('update/<int:pk>/', PatientUpdateView.as_view(), name='patient_update_url'),
     path('<int:pk>/', PatientDetailView.as_view(), name='patient_detail_url'),
