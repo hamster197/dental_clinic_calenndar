@@ -17,7 +17,7 @@ from apps.patients.models import DoctorAppointment, ServiceAppointmentData, \
 from apps.patients.utils import get_all_patients, get_a_patient, create_or_update_pacient_profile, \
     appointments_list_with_counts, save_images_from_post, get_appointment_pay_sum, get_user_appointment_create_mkb_qst, \
     get_user_appointment_update_mkb_qst, get_appointment_by_pk, get_calendar_week_days, get_dental_formula, \
-    get_calendar_week_days_qst
+    get_calendar_week_days_qst, get_aviable_years
 from config.mixins import DoctorExistsMixin
 from config.settings import DOCTOR_BREADCRUMBS_URL
 
@@ -69,11 +69,8 @@ class PatientChoiseHTMXView(DoctorExistsMixin, TemplateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        yeasrs = []
-        for i in range(1930, 2030):
-            yeasrs.append(i)
         context['breadcrumbs'] = self.get_breadcrumbs()
-        context['yeasrs'] = yeasrs
+        context['yeasrs'] = get_aviable_years()
         return context
 
     def post(self, request, *args, **kwargs):

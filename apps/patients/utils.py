@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Q, Subquery, OuterRef, Count, Sum, PositiveIntegerField
+from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
 from datetime import datetime, timedelta
 
@@ -158,3 +159,13 @@ def get_dental_formula(obj):
 
     return qst.filter(dental_formula_id__position_vertical=ToothChoises.Up),  qst.filter(dental_formula_id__position_vertical=ToothChoises.Down)
 
+
+def get_aviable_years():
+    qst = PacientProfile.objects.filter(user_id__groups__name='Пациент').values('date_birth').distinct()
+    years = []
+    for i in qst:
+        year = i['date_birth'].year
+        if year not in years:
+            years.append(year)
+
+    return years
