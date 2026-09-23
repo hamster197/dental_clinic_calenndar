@@ -161,11 +161,14 @@ def get_dental_formula(obj):
 
 
 def get_aviable_years():
-    qst = PacientProfile.objects.filter(user_id__groups__name='Пациент').values('date_birth').distinct()
+    # qst = PacientProfile.objects.filter(user_id__groups__name='Пациент').values('date_birth').distinct()
     years = []
-    for i in qst:
-        year = i['date_birth'].year
-        if year not in years:
-            years.append(year)
+    # for i in qst:
+    #     year = i['date_birth'].year
+    #     if year not in years:
+    #         years.append(year)
+    for i in PacientProfile.objects.dates('date_birth', 'year'):
+        print(i.year)
+        years.append(i.year)
 
     return years
